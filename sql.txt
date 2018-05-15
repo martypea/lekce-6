@@ -1,0 +1,65 @@
+select c.year, c.name, AVG(ps.grade) from Class c join Pupil p on (c.id = p.class_id) join PupilSubject ps on (p.id = ps.pupil_id) group by (c.id);
+select c.year, AVG(ps.grade) from Class c join Pupil p on (c.id = p.class_id) join PupilSubject ps on (p.id = ps.pupil_id) group by (c.year);
+select t.name from Teacher t join Class c on (t.id = c.homeroom_teacher_id) join ClassSubject cs on (t.id = cs.teacher_id) where c.id=cs.class_id;
+
+------------------------------------------------------------------
+select s.name, c.year, AVG(ps.grade) from Subject s 
+join ClassSubject cs on (s.id=cs.subject_id)
+join Class c on (c.id=cs.class_id)
+join Pupil p on (p.class_id=c.id)
+join PupilSubject ps on (p.id=ps.pupil_id)
+where s.id=ps.subject_id
+group by s.id, c.year
+order by s.id asc, c.year asc
+
+Varianta 1 po předmětech a po třídách-----------------------------------------------------------------
+select t.name, s.name, c.year, c.name, AVG(ps.grade) 
+from Teacher t
+join ClassSubject cs on (t.id=cs.teacher_id)
+join Subject s on (s.id=cs.subject_id)
+join Class c on (cs.class_id=c.id)
+join Pupil p on (p.class_id=c.id)
+join PupilSubject ps on (p.id=ps.pupil_id)
+where ps.subject_id=cs.subject_id and ps.grade > 0 and ps.grade < 6
+group by t.name, s.name, c.year, c.name
+order by AVG(ps.grade) asc
+limit 5;
+
+select t.name, s.name, c.year, c.name, AVG(ps.grade) 
+from Teacher t
+join ClassSubject cs on (t.id=cs.teacher_id)
+join Subject s on (s.id=cs.subject_id)
+join Class c on (cs.class_id=c.id)
+join Pupil p on (p.class_id=c.id)
+join PupilSubject ps on (p.id=ps.pupil_id)
+where ps.subject_id=cs.subject_id and ps.grade > 0 and ps.grade < 6
+group by t.name, s.name, c.year, c.name
+order by AVG(ps.grade) desc
+limit 5;
+
+Varianta 2 po předmětech-----------------------------------------------------------------
+select t.name, s.name, AVG(ps.grade)
+from Teacher t
+join ClassSubject cs on (t.id=cs.teacher_id)
+join Subject s on (s.id=cs.subject_id)
+join Class c on (cs.class_id=c.id)
+join Pupil p on (p.class_id=c.id)
+join PupilSubject ps on (p.id=ps.pupil_id)
+where ps.subject_id=cs.subject_id and ps.grade > 0 and ps.grade < 6
+group by t.name, s.name
+order by AVG(ps.grade) asc
+limit 5
+;
+
+select t.name, s.name, AVG(ps.grade)
+from Teacher t
+join ClassSubject cs on (t.id=cs.teacher_id)
+join Subject s on (s.id=cs.subject_id)
+join Class c on (cs.class_id=c.id)
+join Pupil p on (p.class_id=c.id)
+join PupilSubject ps on (p.id=ps.pupil_id)
+where ps.subject_id=cs.subject_id and ps.grade > 0 and ps.grade < 6
+group by t.name, s.name
+order by AVG(ps.grade) desc
+limit 5
+;
